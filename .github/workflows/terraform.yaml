@@ -26,37 +26,31 @@ jobs:
       - name: Checkout
         # v4.1.1
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
-
       - name: Configure AWS credentials
         # v4.0.1
         uses: aws-actions/configure-aws-credentials@010d0da01d0b5a38af31e9c3470dbfdabdecca3a
         with:
-          role-to-assume: ${{ env.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
-
+          role-to-assume: ${{ env.AWS_ROLE_ARN }}
       - name: Setup terraform
         # v2.0.3
         uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1
         with:
           terraform_version: ${{ env.TF_VERSION }}
           cli_config_credentials_token: ${{ env.TF_API_TOKEN }}
-
       - name: Format
         id: format
         working-directory: ${{ env.WORKDIR }}
         run: terraform fmt -check
-
       - name: Init
         id: init
         working-directory: ${{ env.WORKDIR }}
         run: terraform init --backend-config=${{ env.TF_CLOUD_ORGANIZATION }} --backend-config=${{ env.TF_WORKSPACE }}
-
       - name: Plan
         id: plan
         working-directory: ${{ env.WORKDIR }}
         run: terraform plan
         continue-on-error: true
-
       - name: Terraform Plan Status
         if: steps.plan.outcome == 'failure'
         run: exit 1

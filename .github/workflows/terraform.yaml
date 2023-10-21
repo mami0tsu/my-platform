@@ -17,8 +17,8 @@ jobs:
       - name: Checkout
         # v4.1.1
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
-      - name: echo pwd
-        run: pwd
+      - name: cd
+        run: cd ./terraform
       - name: Setup terraform
         # v2.0.3
         uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1

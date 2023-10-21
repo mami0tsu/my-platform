@@ -9,6 +9,7 @@ on:
 
 env:
   TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
+  TF_VERSION: "1.6.2"
 
 jobs:
   terraform-plan:
@@ -17,25 +18,24 @@ jobs:
       - name: Checkout
         # v4.1.1
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
-      - name: cd
-        run: |
-          pwd
-          cd ./terraform
-          pwd
       - name: Setup terraform
         # v2.0.3
         uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1
         with:
+          terraform_version: ${{ env.TF_VERSION }}
           cli_config_credentials_token: ${{ env.TF_API_TOKEN }}
       - name: Format
         id: format
         run: terraform fmt -check
+        working-directory: terraform
       - name: Init
         id: init
         run: terraform init
+        working-directory: terraform
       - name: Plan
         id: plan
         run: terraform plan
+        working-directory: terraform
         continue-on-error: true
       - name: Terraform Plan Status
         if: steps.plan.outcome == 'failure'

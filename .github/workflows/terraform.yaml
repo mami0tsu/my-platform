@@ -4,13 +4,16 @@ on:
   pull_request:
     branches:
       - main
+    paths:
+      - 'terraform/**/*.tf'
 
 env:
-  AWS_REGION: ap-northeast-1
-  AWS_ROLE_ARN: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ vars.AWS_ROLE_NAME }}
+  TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
+  TF_DIRECTORY: './terraform'
+  TF_WORKSPACE: ${{ vars.TF_WORKSPACE }}
 
 jobs:
-  s3ls:
+  terraform-plan:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -19,11 +22,17 @@ jobs:
       - name: Checkout
         # v4.1.1
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
-      - name: Configure AWS credentials
-        # v4.0.1
-        uses: aws-actions/configure-aws-credentials@010d0da01d0b5a38af31e9c3470dbfdabdecca3a
+      - name: Upload configuration
+        # v1.0.4
+        uses: hashicorp/tfc-workflows-github/actions/upload-configuration@a9b5237abdfa0d0510ad3444906147fa424bbdd9
+        id: upload
         with:
-          role-to-assume: ${{ env.AWS_ROLE_ARN }}
-          aws-region: ${{ env.AWS_REGION }}
-      - name: List S3 bucket
-        run: aws s3 ls
+          workspace: ${{ env.TF_WORKSPACE }}
+          directory: ${{ env.TF_DIRECTORY }}
+      - name: Plan
+        # v1.0.4
+        uses: hashicorp/tfc-workflows-github/actions/create-run@a9b5237abdfa0d0510ad3444906147fa424bbdd9
+        id: create-run
+        with:
+          workspace: ${{ env.TF_WORKSPACE }}
+          configuration_version: ${{ steps.upload.outputs.configuration_version_id }}

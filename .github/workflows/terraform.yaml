@@ -8,8 +8,9 @@ on:
       - 'terraform/**/*.tf'
 
 env:
+  TF_CLOUD_ORGANIZATION: ${{ secrets.TF_CLOUD_ORGANIZATION }}
   TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
-  TF_DIRECTORY: './terraform'
+  TF_DIRECTORY: "./terraform"
   TF_WORKSPACE: ${{ vars.TF_WORKSPACE }}
 
 jobs:

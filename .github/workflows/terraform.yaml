@@ -8,8 +8,10 @@ on:
       - 'terraform/**/*.tf'
 
 env:
+  TF_CLOUD_ORGANIZATION: ${{ secrets.TF_CLOUD_ORGANIZATION }}
   TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
-  TF_VERSION: "1.6.2"
+  TF_DIRECTORY: "./terraform"
+  TF_WORKSPACE: ${{ vars.TF_WORKSPACE }}
 
 jobs:
   terraform-plan:
@@ -18,25 +20,17 @@ jobs:
       - name: Checkout
         # v4.1.1
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
-      - name: Setup terraform
-        # v2.0.3
-        uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1
+      - name: Upload configuration
+        # v1.0.4
+        uses: hashicorp/tfc-workflows-github/actions/upload-configuration@a9b5237abdfa0d0510ad3444906147fa424bbdd9
+        id: upload
         with:
-          terraform_version: ${{ env.TF_VERSION }}
-          cli_config_credentials_token: ${{ env.TF_API_TOKEN }}
-      - name: Format
-        id: format
-        run: terraform fmt -check
-        working-directory: terraform
-      - name: Init
-        id: init
-        run: terraform init
-        working-directory: terraform
+          workspace: ${{ env.TF_WORKSPACE }}
+          directory: ${{ env.TF_DIRECTORY }}
       - name: Plan
-        id: plan
-        run: terraform plan
-        working-directory: terraform
-        continue-on-error: true
-      - name: Terraform Plan Status
-        if: steps.plan.outcome == 'failure'
-        run: exit 1
+        # v1.0.4
+        uses: hashicorp/tfc-workflows-github/actions/create-run@a9b5237abdfa0d0510ad3444906147fa424bbdd9
+        id: create-run
+        with:
+          workspace: ${{ env.TF_WORKSPACE }}
+          configuration_version: ${{ steps.upload.outputs.configuration_version_id }}

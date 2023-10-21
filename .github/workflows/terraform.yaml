@@ -23,6 +23,7 @@ jobs:
       - name: Upload configuration
         # v1.0.4
         uses: hashicorp/tfc-workflows-github/actions/upload-configuration@a9b5237abdfa0d0510ad3444906147fa424bbdd9
+        working-directory: terraform
         id: upload
         with:
           workspace: ${{ env.TF_WORKSPACE }}
@@ -31,6 +32,7 @@ jobs:
         # v1.0.4
         uses: hashicorp/tfc-workflows-github/actions/create-run@a9b5237abdfa0d0510ad3444906147fa424bbdd9
         id: create-run
+        working-directory: terraform
         with:
           workspace: ${{ env.TF_WORKSPACE }}
           configuration_version: ${{ steps.upload.outputs.configuration_version_id }}

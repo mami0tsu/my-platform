@@ -1,9 +1,7 @@
 name: Create Pull Request
 
 on:
-  push:
-    branches-ignore:
-      - main
+  create
 
 env:
   BASE_BRANCH: main

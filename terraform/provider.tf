@@ -8,7 +8,11 @@ terraform {
     }
   }
 
-  cloud {}
+  cloud {
+    workspaces {
+      tags = ["stage:prd"]
+    }
+  }
 }
 
 provider "aws" {

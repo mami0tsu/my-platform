@@ -71,7 +71,9 @@ jobs:
                 Plan: ${{ steps.plan-output.outputs.add }} to add, ${{ steps.plan-output.outputs.change }} to change, ${{ steps.plan-output.outputs.destroy }} to destroy.
                 \`\`\`\n
                 [Terraform Cloud Plan](${{ steps.plan-run.outputs.run_link }})
-                ${{ steps.plan-output.plan_status }}
+                plan-status: ${{ steps.plan-output.plan_status }}
+                run-status: ${{ steps.plan-run.outputs.run_status }}
+                run-message: ${{ steps.plan-run.outputs.run_message }}
                 `;
             if (botComment) {
               github.rest.issues.deleteComment({

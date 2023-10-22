@@ -34,7 +34,7 @@ jobs:
           workspace: ${{ env.TF_WORKSPACE }}
           directory: ${{ env.CONFIG_DIRECTORY }}
 
-      - name: Create Plan Run
+      - name: Plan
         # v.1.0.4
         uses: hashicorp/tfc-workflows-github/actions/create-run@a9b5237abdfa0d0510ad3444906147fa424bbdd9
         id: plan

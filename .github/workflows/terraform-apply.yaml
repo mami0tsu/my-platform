@@ -1,0 +1,50 @@
+name: Terraform Apply
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
+    paths:
+      - 'terraform/**/*.tf'
+
+env:
+  TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
+  TF_CLOUD_ORGANIZATION: ${{ vars.TF_CLOUD_ORGANIZATION }}
+  TF_WORKSPACE: ${{ vars.TF_WORKSPACE }}
+  CONFIG_DIRECTORY: './terraform'
+
+jobs:
+  terraform-apply:
+    name: Terraform Apply
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        # v4.1.1
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+
+      - name: Upload Configuration
+        # v.1.0.4
+        uses: hashicorp/tfc-workflows-github/actions/upload-configuration@a9b5237abdfa0d0510ad3444906147fa424bbdd9
+        id: upload
+        with:
+          workspace: ${{ env.TF_WORKSPACE }}
+          directory: ${{ env.CONFIG_DIRECTORY }}
+
+      - name: Plan
+        # v.1.0.4
+        uses: hashicorp/tfc-workflows-github/actions/create-run@a9b5237abdfa0d0510ad3444906147fa424bbdd9
+        id: plan
+        with:
+          workspace: ${{ env.TF_WORKSPACE }}
+          configuration_version: ${{ steps.upload.outputs.configuration_version_id }}
+      - name: Apply
+        # v.1.0.4
+        uses: hashicorp/tfc-workflows-github/actions/apply-run@a9b5237abdfa0d0510ad3444906147fa424bbdd9
+        id: apply
+        with:
+          workspace: ${{ env.TF_WORKSPACE }}
+          run: ${{ steps.plan.outputs.run_id }}

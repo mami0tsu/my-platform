@@ -45,7 +45,7 @@ jobs:
       - name: Init
         id: init
         working-directory: ${{ env.WORKDIR }}
-        run: terraform init --backend-config=${{ env.TF_CLOUD_ORGANIZATION }} --backend-config=${{ env.TF_WORKSPACE }}
+        run: terraform init --backend-config="organization = "${{ env.TF_CLOUD_ORGANIZATION }}"" --backend-config="workspaces { name = "${{ env.TF_WORKSPACE }}""
       - name: Plan
         id: plan
         working-directory: ${{ env.WORKDIR }}

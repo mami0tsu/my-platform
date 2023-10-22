@@ -65,12 +65,12 @@ jobs:
             const botComment = comments.find(comment => {
               return comment.user.type === 'Bot' && comment.body.includes('Terraform Cloud Plan Output')
             });
-            const output = `#### Terraform Cloud Plan Output
+            const output = "#### Terraform Cloud Plan Output
                 \`\`\`
                 Plan: ${{ steps.plan-output.outputs.add }} to add, ${{ steps.plan-output.outputs.change }} to change, ${{ steps.plan-output.outputs.destroy }} to destroy.
                 \`\`\`
                 [Terraform Cloud Plan](${{ steps.plan-run.outputs.run_link }})
-                `;
+                ";
             if (botComment) {
               github.rest.issues.deleteComment({
                 owner: context.repo.owner,

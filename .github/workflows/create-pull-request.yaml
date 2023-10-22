@@ -1,9 +1,7 @@
 name: Create Pull Request
 
 on:
-  push:
-    branches-ignore:
-      - main
+  create
 
 env:
   BASE_BRANCH: main
@@ -11,7 +9,6 @@ env:
 
 jobs:
   create-pull-request:
-    if: ${{ !github.event.created }}
     runs-on: ubuntu-latest
     permissions:
       contents: read

@@ -8,8 +8,8 @@ on:
       - 'terraform/**/*.tf'
 
 env:
-  TF_CLOUD_ORGANIZATION: ${{ secrets.TF_CLOUD_ORGANIZATION }}
   TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
+  TF_CLOUD_ORGANIZATION: ${{ vars.TF_CLOUD_ORGANIZATION }}
   TF_WORKSPACE: ${{ vars.TF_WORKSPACE }}
   CONFIG_DIRECTORY: './terraform'
 
@@ -49,3 +49,38 @@ jobs:
         id: plan-output
         with:
           plan: ${{ fromJSON(steps.plan-run.outputs.payload).data.relationships.plan.data.id }}
+
+      - name: Update PR
+        # v6.4.1
+        uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410
+        id: plan-comment
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            const botComment = comments.find(comment => {
+              return comment.user.type === 'Bot' && comment.body.includes('Terraform Cloud Plan Output')
+            });
+            const output = `#### Terraform Cloud Plan Output
+                \`\`\`
+                Plan: ${{ steps.plan-output.outputs.add }} to add, ${{ steps.plan-output.outputs.change }} to change, ${{ steps.plan-output.outputs.destroy }} to destroy.
+                \`\`\`
+                [Terraform Cloud Plan](${{ steps.plan-run.outputs.run_link }})
+                `;
+            if (botComment) {
+              github.rest.issues.deleteComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+              });
+            }
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            });

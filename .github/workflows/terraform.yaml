@@ -50,6 +50,13 @@ jobs:
         with:
           plan: ${{ fromJSON(steps.plan-run.outputs.payload).data.relationships.plan.data.id }}
 
+      - name: Get Plan Show
+        # v.1.0.4
+        uses: hashicorp/tfc-workflows-github/actions/show-run@a9b5237abdfa0d0510ad3444906147fa424bbdd9
+        id: plan-show
+        with:
+          run: ${{ steps.plan-run.run_id }}
+
       - name: Update PR
         # v6.4.1
         uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410
@@ -65,11 +72,13 @@ jobs:
             const botComment = comments.find(comment => {
               return comment.user.type === 'Bot' && comment.body.includes('Terraform Cloud Plan Output')
             });
-            const output = `# Terraform Cloud Plan Output
-                \n\n
+            const output = `#### Terraform Cloud Plan Output
+                \ntest
+                <details><summary>Plan: ${{ steps.plan-output.outputs.add }} to add, ${{ steps.plan-output.outputs.change }} to change, ${{ steps.plan-output.outputs.destroy }} to destroy.</summary>
                 \`\`\`
-                Plan: ${{ steps.plan-output.outputs.add }} to add, ${{ steps.plan-output.outputs.change }} to change, ${{ steps.plan-output.outputs.destroy }} to destroy.
+                ${{ steps.plan-show.payload }}
                 \`\`\`
+                </details>
                 [Terraform Cloud Plan](${{ steps.plan-run.outputs.run_link }})
                 `;
             if (botComment) {

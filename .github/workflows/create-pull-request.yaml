@@ -11,7 +11,6 @@ env:
 
 jobs:
   create-pull-request:
-    if: ${{ !github.event.created }}
     runs-on: ubuntu-latest
     permissions:
       contents: read

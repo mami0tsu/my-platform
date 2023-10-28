@@ -20,6 +20,7 @@ provider "aws" {
 
   default_tags {
     tags = {
+      account    = local.account_alias
       stage      = local.stage
       managed-by = "terraform"
     }

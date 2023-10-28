@@ -7,16 +7,9 @@ resource "aws_iam_account_alias" "alias" {
 module "console_user" {
   source = "./modules/iam_user"
 
-  name       = "console"
-  account_id = data.aws_caller_identity.this.account_id
-}
-
-module "power_user_role" {
-  source = "./modules/iam_role"
-
-  name       = "power-user"
-  policy     = data.aws_iam_policy_document.power_user.json
-  principals = [module.console_user.arn]
+  name        = "console"
+  policy_name = "power-user"
+  policy      = data.aws_iam_policy_document.power_user.json
 }
 
 data "aws_iam_policy_document" "power_user" {

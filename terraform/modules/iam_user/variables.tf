@@ -3,7 +3,12 @@ variable "name" {
   description = "Name of IAM user and group"
 }
 
-variable "account_id" {
+variable "policy_name" {
   type        = string
-  description = "AWS account ID"
+  description = "Policy name"
+}
+
+variable "policy" {
+  type        = string
+  description = "IAM policy attached to role"
 }

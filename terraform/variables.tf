@@ -1,5 +1,6 @@
 locals {
-  stage = "prd"
+  account_alias = "prd-mami0tsu"
+  stage         = "prd"
 }
 
 variable "TFC_AWS_PLAN_ROLE_ARN" {

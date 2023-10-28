@@ -36,7 +36,7 @@ data "aws_iam_policy_document" "assume_role_policy_4_console_group" {
     sid       = ""
     effect    = "Allow"
     actions   = ["sts:AssumeRole"]
-    resources = ["${aws_iam_role.console.arn}"]
+    resources = [aws_iam_role.console.arn]
   }
 }
 
@@ -48,28 +48,28 @@ resource "aws_iam_group_policy_attachment" "assume_role_2_console_group" {
 #
 # IAM Role
 #
-# resource "aws_iam_role" "console" {
-#   name               = "console"
-#   description        = ""
-#   path               = "/"
-#   assume_role_policy = data.aws_iam_policy_document.assume_role_policy_4_console_role.json
-# }
-#
-# data "aws_iam_policy_document" "assume_role_policy_4_console_role" {
-#   version = "2012-10-17"
-#
-#   statement {
-#     sid     = ""
-#     effect  = "Allow"
-#     actions = ["sts:AssumeRole"]
-#
-#     principals = {
-#       type        = "AWS"
-#       identifiers = ["${aws_iam_user.console.arn}"]
-#     }
-#   }
-# }
-#
+resource "aws_iam_role" "console" {
+  name               = "console"
+  description        = ""
+  path               = "/"
+  assume_role_policy = data.aws_iam_policy_document.assume_role_policy_4_console_role.json
+}
+
+data "aws_iam_policy_document" "assume_role_policy_4_console_role" {
+  version = "2012-10-17"
+
+  statement {
+    sid     = ""
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+
+    principals = {
+      type        = "AWS"
+      identifiers = [aws_iam_user.console.arn]
+    }
+  }
+}
+
 # resource "aws_iam_policy" "power_user" {
 #   name        = "power-user"
 #   description = ""

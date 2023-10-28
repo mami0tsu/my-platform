@@ -70,39 +70,39 @@ data "aws_iam_policy_document" "assume_role_policy_4_console_role" {
   }
 }
 
-# resource "aws_iam_policy" "power_user" {
-#   name        = "power-user"
-#   description = ""
-#   path        = "/"
-#   policy      = data.aws_iam_policy_document.power_user.json
-# }
-#
-# data "aws_iam_policy_document" "power_user" {
-#   version = "2012-10-17"
-#
-#   statement {
-#     sid = ""
-#     effect = "Allow"
-#     not_actions = [
-#       "organizations:*",
-#       "account:*"
-#     ]
-#     resources = ["*"]
-#   }
-#
-#   statement {
-#     sid = ""
-#     effect = "Allow"
-#     actions = [
-#       "organizations:DescribeOrganization",
-#       "account:ListRegions",
-#       "account:GetAccountInformation"
-#     ]
-#     resources = ["*"]
-#   }
-# }
-#
-# resource "aws_iam_role_policy_attachment" "power_user_2_console" {
-#   role       = aws_iam_role.console.name
-#   policy_arn = aws_iam_policy.power_user.arn
-# }
+resource "aws_iam_policy" "power_user" {
+  name        = "power-user"
+  description = ""
+  path        = "/"
+  policy      = data.aws_iam_policy_document.power_user.json
+}
+
+data "aws_iam_policy_document" "power_user" {
+  version = "2012-10-17"
+
+  statement {
+    sid    = ""
+    effect = "Allow"
+    not_actions = [
+      "organizations:*",
+      "account:*"
+    ]
+    resources = ["*"]
+  }
+
+  statement {
+    sid    = ""
+    effect = "Allow"
+    actions = [
+      "organizations:DescribeOrganization",
+      "account:ListRegions",
+      "account:GetAccountInformation"
+    ]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_role_policy_attachment" "power_user_2_console" {
+  role       = aws_iam_role.console.name
+  policy_arn = aws_iam_policy.power_user.arn
+}

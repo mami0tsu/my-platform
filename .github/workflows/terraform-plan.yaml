@@ -54,6 +54,7 @@ jobs:
         # v6.4.1
         uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410
         id: comment
+        if: success() || failure()
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -66,9 +67,10 @@ jobs:
               return comment.user.type === 'Bot' && comment.body.includes('Terraform Cloud Plan Output')
             });
             const output = `
-                \nTerraform Cloud Plan Output
+                \nTerraform Cloud Plan Output\n
                 \`\`\`
-                Plan: ${{ steps.plan-output.outputs.add }} to add, ${{ steps.output.outputs.change }} to change, ${{ steps.output.outputs.destroy }} to destroy.
+                Status: ${{ steps.output.outputs.status }}
+                Plan: ${{ steps.output.outputs.add }} to add, ${{ steps.output.outputs.change }} to change, ${{ steps.output.outputs.destroy }} to destroy.
                 \`\`\`
                 [Terraform Cloud Plan](${{ steps.plan.outputs.run_link }})
                 `;

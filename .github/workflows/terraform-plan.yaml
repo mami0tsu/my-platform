@@ -67,7 +67,7 @@ jobs:
               return comment.user.type === 'Bot' && comment.body.includes('Terraform Cloud Plan Output')
             });
             const output = `
-                \nTerraform Cloud Plan Output\n
+                \nTerraform Cloud Plan Output
                 \`\`\`
                 Status: ${{ steps.output.outputs.status }}
                 Plan: ${{ steps.output.outputs.add }} to add, ${{ steps.output.outputs.change }} to change, ${{ steps.output.outputs.destroy }} to destroy.

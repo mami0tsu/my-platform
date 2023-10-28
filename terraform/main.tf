@@ -63,7 +63,7 @@ data "aws_iam_policy_document" "assume_role_policy_4_console_role" {
     effect  = "Allow"
     actions = ["sts:AssumeRole"]
 
-    principals = {
+    principals {
       type        = "AWS"
       identifiers = [aws_iam_user.console.arn]
     }

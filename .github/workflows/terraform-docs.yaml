@@ -9,11 +9,14 @@ on:
 
 jobs:
   terraform-docs:
+    name: Terraform Docs
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         # v4.1.1
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Generate module docs
         uses: terraform-docs/gh-actions@v1.0.0

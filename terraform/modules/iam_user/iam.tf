@@ -6,19 +6,6 @@ resource "aws_iam_user" "this" {
   path = "/"
 }
 
-resource "aws_iam_user_login_profile" "this" {
-  count = var.enable_console ? 1 : 0
-
-  user = aws_iam_user.this.name
-}
-
-resource "aws_iam_virtual_mfa_device" "this" {
-  count = var.enable_mfa ? 1 : 0
-
-  virtual_mfa_device_name = var.name
-  path                    = "/"
-}
-
 #
 # IAM group
 #

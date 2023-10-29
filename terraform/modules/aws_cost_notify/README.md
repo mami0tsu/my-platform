@@ -1,4 +1,4 @@
-# aws-cost-notify
+# AWS cost notify
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements

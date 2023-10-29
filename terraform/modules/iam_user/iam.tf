@@ -6,6 +6,20 @@ resource "aws_iam_user" "this" {
   path = "/"
 }
 
+resource "aws_iam_user_login_profile" "this" {
+  count = var.enable_console ? 1 : 0
+
+  user                    = aws_iam_user.this.name
+  password_reset_required = true
+}
+
+resource "aws_iam_virtual_mfa_device" "this" {
+  count = var.enable_mfa ? 1 : 0
+
+  virtual_mfa_device_name = var.name
+  path                    = "/"
+}
+
 #
 # IAM group
 #
@@ -19,14 +33,14 @@ resource "aws_iam_user_group_membership" "this" {
   groups = [aws_iam_group.this.name]
 }
 
-resource "aws_iam_policy" "assume_role" {
+resource "aws_iam_policy" "assume_role_policy" {
   name        = var.name
   description = ""
   path        = "/"
-  policy      = data.aws_iam_policy_document.assume_role.json
+  policy      = data.aws_iam_policy_document.assume_role_policy.json
 }
 
-data "aws_iam_policy_document" "assume_role" {
+data "aws_iam_policy_document" "assume_role_policy" {
   version = "2012-10-17"
 
   statement {
@@ -39,7 +53,7 @@ data "aws_iam_policy_document" "assume_role" {
 
 resource "aws_iam_group_policy_attachment" "this" {
   group      = aws_iam_group.this.name
-  policy_arn = aws_iam_policy.assume_role.arn
+  policy_arn = aws_iam_policy.assume_role_policy.arn
 }
 
 #
@@ -49,10 +63,10 @@ resource "aws_iam_role" "this" {
   name               = var.name
   description        = ""
   path               = "/"
-  assume_role_policy = data.aws_iam_policy_document.this.json
+  assume_role_policy = data.aws_iam_policy_document.trust_policy.json
 }
 
-data "aws_iam_policy_document" "this" {
+data "aws_iam_policy_document" "trust_policy" {
   version = "2012-10-17"
 
   statement {
@@ -67,7 +81,7 @@ data "aws_iam_policy_document" "this" {
   }
 }
 
-resource "aws_iam_policy" "this" {
+resource "aws_iam_policy" "role_policy" {
   name        = var.policy_name
   description = ""
   path        = "/"

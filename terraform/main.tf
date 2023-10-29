@@ -7,9 +7,11 @@ resource "aws_iam_account_alias" "alias" {
 module "console_user" {
   source = "./modules/iam_user"
 
-  name        = "console"
-  policy_name = "power-user"
-  policy      = data.aws_iam_policy_document.power_user.json
+  name           = "console"
+  enable_console = true
+  enable_mfa     = true
+  policy_name    = "power-user"
+  policy         = data.aws_iam_policy_document.power_user.json
 }
 
 data "aws_iam_policy_document" "power_user" {

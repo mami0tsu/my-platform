@@ -44,3 +44,9 @@ data "aws_iam_policy_document" "power_user" {
     resources = ["*"]
   }
 }
+
+resource "aws_iam_openid_connect_provider" {
+  url             = ""
+  client_id_list  = [""]
+  thumbprint_list = [""]
+}

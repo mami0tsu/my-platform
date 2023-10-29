@@ -1,0 +1,24 @@
+name: Terraform Docs
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'terraform/modules/**/*.tf'
+
+jobs:
+  terraform-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        # v4.1.1
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+
+      - name: Generate module docs
+        uses: terraform-docs/gh-actions@v1.0.0
+        with:
+          working-dir: terraform/modules/*/
+          output-file: README.md
+          output-method: inject
+          git-push: "true"

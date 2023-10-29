@@ -34,8 +34,6 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_enable_console"></a> [enable\_console](#input\_enable\_console) | Enable console access | `bool` | n/a | yes |
-| <a name="input_enable_mfa"></a> [enable\_mfa](#input\_enable\_mfa) | Enable MFA | `bool` | n/a | yes |
 | <a name="input_name"></a> [name](#input\_name) | Name of IAM user and group | `string` | n/a | yes |
 | <a name="input_policy"></a> [policy](#input\_policy) | IAM policy attached to role | `string` | n/a | yes |
 | <a name="input_policy_name"></a> [policy\_name](#input\_policy\_name) | Policy name | `string` | n/a | yes |

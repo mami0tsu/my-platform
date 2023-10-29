@@ -9,6 +9,8 @@ terraform {
   }
 
   cloud {
+    hostname = "app.terraform.io"
+
     workspaces {
       tags = ["stage:prd"]
     }
@@ -17,4 +19,12 @@ terraform {
 
 provider "aws" {
   region = "ap-northeast-1"
+
+  default_tags {
+    tags = {
+      account    = local.account_alias
+      stage      = local.stage
+      managed-by = "terraform"
+    }
+  }
 }
